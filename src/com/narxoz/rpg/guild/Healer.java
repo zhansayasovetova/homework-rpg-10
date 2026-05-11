@@ -10,12 +10,31 @@ public class Healer extends GuildMember {
     }
 
     public void prepareAid(String topic, String payload) {
-        // TODO: send a healing message through the mediator.
+
         getMediator().dispatch(topic, this, payload);
     }
 
     @Override
     public void receive(String topic, GuildMember from, String payload) {
-        // TODO: react to a guild-hall message without calling another colleague directly.
+
+        System.out.println(
+                "[Healer " + getName() + "] received topic '" +
+                        topic + "' from " + from.getName() +
+                        ": " + payload
+        );
+
+        if ("danger".equalsIgnoreCase(topic)) {
+
+            System.out.println(
+                    "[Healer " + getName() + "] prepares healing potions and recovery beds."
+            );
+        }
+
+        if ("healing".equalsIgnoreCase(topic)) {
+
+            System.out.println(
+                    "[Healer " + getName() + "] organizes medical support for the heroes."
+            );
+        }
     }
 }
