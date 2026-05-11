@@ -14,12 +14,45 @@ public class GuildHall implements GuildMediator {
 
     @Override
     public void register(GuildMember member) {
-        // TODO: add the member to the topic lists it should receive.
+
+        if (member instanceof Captain) {
+            addSubscriber("danger", member);
+            addSubscriber("healing", member);
+            addSubscriber("supplies", member);
+            addSubscriber("quest", member);
+        }
+
+        else if (member instanceof Scout) {
+            addSubscriber("danger", member);
+            addSubscriber("quest", member);
+        }
+
+        else if (member instanceof Healer) {
+            addSubscriber("healing", member);
+            addSubscriber("danger", member);
+        }
+
+        else if (member instanceof Quartermaster) {
+            addSubscriber("supplies", member);
+            addSubscriber("quest", member);
+        }
+
+        else if (member instanceof Loremaster) {
+            addSubscriber("quest", member);
+        }
     }
 
     @Override
     public void dispatch(String topic, GuildMember from, String payload) {
-        // TODO: notify registered members for the topic without direct colleague calls.
+
+        List<GuildMember> subscribers = subscribersFor(topic);
+
+        for (GuildMember member : subscribers) {
+
+            if (member != from) {
+                member.receive(topic, from, payload);
+            }
+        }
     }
 
     protected void addSubscriber(String topic, GuildMember member) {
